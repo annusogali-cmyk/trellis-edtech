@@ -1,0 +1,2243 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Trellis — Sand Pit Experiment</title>
+
+    <!-- SWITZER -->
+    <link
+        href="https://api.fontshare.com/v2/css?f[]=switzer@400,500,600,700&display=swap"
+        rel="stylesheet"
+    >
+
+    <style>
+
+        /* =====================================================
+           TRELLIS COLOURS
+        ===================================================== */
+
+        :root {
+
+            --orange: #FFAD01;
+            --yellow: #CBC308;
+            --pink: #F2AFE2;
+            --magenta: #F03272;
+            --blue: #9AB3EB;
+            --dark: #1F1D1D;
+            --white: #FFFFFF;
+
+        }
+
+
+        /* =====================================================
+           RESET
+        ===================================================== */
+
+        * {
+
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+
+        }
+
+
+        body {
+
+            font-family: "Switzer", sans-serif;
+
+            background: var(--dark);
+
+            color: white;
+
+            width: 100vw;
+            height: 100vh;
+
+            overflow: hidden;
+
+        }
+
+
+        /* =====================================================
+           MAIN PAGE
+        ===================================================== */
+
+        .page {
+
+            width: 100vw;
+            height: 100vh;
+
+            position: relative;
+
+            overflow: hidden;
+
+        }
+
+
+        /* =====================================================
+           BACK BUTTON
+        ===================================================== */
+
+        .back-button {
+
+            position: absolute;
+
+            top: 25px;
+            left: 40px;
+
+            width: 54px;
+            height: 54px;
+
+            border: none;
+
+            border-radius: 50%;
+
+            background: #EEEEEE;
+
+            color: var(--dark);
+
+            font-size: 30px;
+
+            display: flex;
+
+            align-items: center;
+            justify-content: center;
+
+            cursor: pointer;
+
+            z-index: 100;
+
+            transition: .2s ease;
+
+        }
+
+
+        .back-button:hover {
+
+            transform: scale(1.08);
+
+        }
+
+
+        /* =====================================================
+           HOME BUTTON
+        ===================================================== */
+
+        .home-button {
+
+            position: absolute;
+
+            top: 25px;
+            right: 40px;
+
+            width: 80px;
+            height: 80px;
+
+            border: none;
+
+            border-radius: 50%;
+
+            background: var(--blue);
+
+            font-size: 34px;
+
+            cursor: pointer;
+
+            z-index: 100;
+
+            transition: .2s ease;
+
+        }
+
+
+        .home-button:hover {
+
+            transform: scale(1.08);
+
+        }
+
+
+        /* =====================================================
+           INSTRUCTIONS
+        ===================================================== */
+
+        .instruction {
+
+            position: absolute;
+
+            top: 30px;
+
+            left: 50%;
+
+            transform: translateX(-50%);
+
+            width: 600px;
+
+            text-align: center;
+
+            z-index: 20;
+
+            pointer-events: none;
+
+        }
+
+
+        .instruction h1 {
+
+            font-size: 30px;
+
+            font-weight: 600;
+
+            letter-spacing: -1px;
+
+            margin-bottom: 7px;
+
+        }
+
+
+        .instruction p {
+
+            font-size: 15px;
+
+            color: #DDDDDD;
+
+        }
+
+
+        .instruction strong {
+
+            color: var(--pink);
+
+        }
+
+
+        /* =====================================================
+           ELEMENT SPRINKLES
+        ===================================================== */
+
+        .element {
+
+            position: absolute;
+
+            width: 95px;
+            height: 43px;
+
+            border-radius: 30px;
+
+            display: flex;
+
+            align-items: center;
+            justify-content: center;
+
+            color: #111111;
+
+            font-size: 14px;
+
+            font-weight: 600;
+
+            user-select: none;
+
+            cursor: grab;
+
+            touch-action: none;
+
+            z-index: 50;
+
+            transition:
+
+                box-shadow .2s ease,
+
+                transform .2s ease;
+
+        }
+
+
+        .element:hover {
+
+            box-shadow:
+
+                0 10px 25px rgba(0,0,0,.25);
+
+        }
+
+
+        .element.dragging {
+
+            cursor: grabbing;
+
+            z-index: 200;
+
+            box-shadow:
+
+                0 15px 35px rgba(0,0,0,.35);
+
+            transform: scale(1.08) !important;
+
+        }
+
+
+        /* =====================================================
+           ELEMENT COLOURS
+        ===================================================== */
+
+        .na {
+
+            background: var(--magenta);
+
+        }
+
+
+        .cl {
+
+            background: var(--magenta);
+
+        }
+
+
+        .si {
+
+            background: var(--blue);
+
+        }
+
+
+        .ca {
+
+            background: var(--yellow);
+
+        }
+
+
+        .o {
+
+            background: var(--pink);
+
+        }
+
+
+        .zn {
+
+            background: var(--blue);
+
+        }
+
+
+        .al {
+
+            background: var(--yellow);
+
+        }
+
+
+        .mg {
+
+            background: var(--blue);
+
+        }
+
+
+        .p {
+
+            background: var(--yellow);
+
+        }
+
+
+        .k {
+
+            background: var(--pink);
+
+        }
+
+
+        /* =====================================================
+           EXPERIMENT AREA
+        ===================================================== */
+
+        .experiment-area {
+
+            position: absolute;
+
+            width: 63vw;
+
+            height: 48vh;
+
+            min-width: 650px;
+
+            min-height: 350px;
+
+            left: 50%;
+
+            top: 52%;
+
+            transform: translate(-50%, -50%);
+
+            background: var(--pink);
+
+            border-radius: 20px;
+
+            border: 4px solid transparent;
+
+            z-index: 5;
+
+            transition:
+
+                border .2s ease,
+
+                transform .2s ease;
+
+        }
+
+
+        .experiment-area.drag-over {
+
+            border:
+
+                4px dashed
+
+                var(--magenta);
+
+            transform:
+
+                translate(-50%, -50%)
+
+                scale(1.015);
+
+        }
+
+
+        /* =====================================================
+           PINK BOX INSTRUCTION
+        ===================================================== */
+
+        .drop-message {
+
+            position: absolute;
+
+            left: 30px;
+
+            top: 28px;
+
+            color: var(--dark);
+
+            font-size: 17px;
+
+            font-weight: 500;
+
+            pointer-events: none;
+
+            opacity: .8;
+
+            z-index: 2;
+
+        }
+
+
+        .drop-message span {
+
+            display: block;
+
+            font-size: 12px;
+
+            margin-top: 5px;
+
+            opacity: .65;
+
+        }
+
+
+        /* =====================================================
+           RESULT CARD
+        ===================================================== */
+
+        .result-card {
+
+            position: absolute;
+
+            right: 25px;
+
+            top: 25px;
+
+            width: 280px;
+
+            height: 310px;
+
+            background: white;
+
+            color: var(--dark);
+
+            border-radius: 18px;
+
+            padding: 14px;
+
+            display: none;
+
+            flex-direction: column;
+
+            z-index: 10;
+
+            box-shadow:
+
+                0 15px 35px rgba(0,0,0,.15);
+
+            animation: resultIn .35s ease;
+
+        }
+
+
+        .result-card.show {
+
+            display: flex;
+
+        }
+
+
+        @keyframes resultIn {
+
+            from {
+
+                opacity: 0;
+
+                transform: translateX(20px);
+
+            }
+
+            to {
+
+                opacity: 1;
+
+                transform: translateX(0);
+
+            }
+
+        }
+
+
+        /* =====================================================
+           RESULT IMAGE
+        ===================================================== */
+
+        .compound-image {
+
+            width: 100%;
+
+            height: 135px;
+
+            border-radius: 10px;
+
+            background: #DCDCDC;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            position: relative;
+
+            overflow: hidden;
+
+        }
+
+
+        .compound-image::before {
+
+            content: "";
+
+            width: 75px;
+
+            height: 75px;
+
+            border-radius: 50%;
+
+            background:
+
+                radial-gradient(
+
+                    circle at 30% 30%,
+
+                    #ffffff 0%,
+
+                    #eeeeee 18%,
+
+                    #bbbbbb 45%,
+
+                    #888888 70%,
+
+                    #cccccc 100%
+
+                );
+
+            box-shadow:
+
+                35px 18px 0 -9px #AAAAAA,
+
+                -30px 15px 0 -12px #EEEEEE;
+
+        }
+
+
+        .compound-image::after {
+
+            content: attr(data-label);
+
+            position: absolute;
+
+            font-size: 19px;
+
+            font-weight: 600;
+
+            color: #777777;
+
+        }
+
+
+        /* =====================================================
+           RESULT TEXT
+        ===================================================== */
+
+        .result-card h2 {
+
+            font-size: 24px;
+
+            font-weight: 600;
+
+            margin-top: 11px;
+
+        }
+
+
+        .full-name {
+
+            font-size: 13px;
+
+            color: #555555;
+
+            margin-top: 3px;
+
+        }
+
+
+        .result-details {
+
+            margin-top: 14px;
+
+            font-size: 12px;
+
+        }
+
+
+        .colour-dot {
+
+            display: inline-block;
+
+            width: 14px;
+
+            height: 14px;
+
+            border-radius: 50%;
+
+            margin-left: 5px;
+
+            margin-right: 4px;
+
+            vertical-align: middle;
+
+            border: 1px solid #777777;
+
+        }
+
+
+        /* =====================================================
+           RESET BUTTON
+        ===================================================== */
+
+        .reset-button {
+
+            position: absolute;
+
+            left: 50%;
+
+            bottom: 20px;
+
+            transform: translateX(-50%);
+
+            background: var(--dark);
+
+            color: white;
+
+            border: none;
+
+            border-radius: 25px;
+
+            padding: 11px 22px;
+
+            font-family: inherit;
+
+            font-size: 13px;
+
+            cursor: pointer;
+
+            display: none;
+
+            z-index: 30;
+
+        }
+
+
+        .reset-button.show {
+
+            display: block;
+
+        }
+
+
+        .reset-button:hover {
+
+            transform:
+
+                translateX(-50%)
+
+                scale(1.04);
+
+        }
+
+
+        /* =====================================================
+           SUCCESS MESSAGE
+        ===================================================== */
+
+        .success-message {
+
+            position: absolute;
+
+            left: 50%;
+
+            bottom: 18px;
+
+            transform: translateX(-50%);
+
+            background: var(--magenta);
+
+            color: white;
+
+            padding: 8px 15px;
+
+            border-radius: 20px;
+
+            font-size: 12px;
+
+            display: none;
+
+            z-index: 25;
+
+        }
+
+
+        /* =====================================================
+           RESPONSIVE
+        ===================================================== */
+
+        @media(max-width: 1000px) {
+
+            .experiment-area {
+
+                width: 80vw;
+
+                min-width: 600px;
+
+            }
+
+        }
+
+
+        @media(max-width: 700px) {
+
+            body {
+
+                overflow: auto;
+
+            }
+
+            .page {
+
+                height: 900px;
+
+            }
+
+            .instruction {
+
+                width: 90%;
+
+            }
+
+            .experiment-area {
+
+                width: 90vw;
+
+                min-width: 0;
+
+                height: 500px;
+
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<div class="page">
+
+
+    <!-- =====================================================
+         BACK
+    ====================================================== -->
+
+    <button
+        class="back-button"
+        onclick="goBack()">
+
+        ←
+
+    </button>
+
+
+    <!-- =====================================================
+         HOME
+    ====================================================== -->
+
+    <button
+        class="home-button"
+        onclick="goHome()">
+
+        🏠
+
+    </button>
+
+
+    <!-- =====================================================
+         INSTRUCTION
+    ====================================================== -->
+
+    <div class="instruction">
+
+        <h1>
+
+            🧪 Build a Compound
+
+        </h1>
+
+        <p>
+
+            <strong>Pick 2 elements</strong>
+            and drag them into the experiment area.
+
+        </p>
+
+    </div>
+
+
+    <!-- =====================================================
+         ELEMENTS
+    ====================================================== -->
+
+
+    <div
+        class="element na"
+        data-element="Na"
+        style="
+            left: 32%;
+            top: 43%;
+            transform: rotate(45deg);
+        ">
+
+        Na
+
+    </div>
+
+
+    <div
+        class="element cl"
+        data-element="Cl"
+        style="
+            left: 38%;
+            top: 43%;
+            transform: rotate(12deg);
+        ">
+
+        Cl
+
+    </div>
+
+
+    <div
+        class="element si"
+        data-element="Si"
+        style="
+            left: 27%;
+            top: 12%;
+            transform: rotate(-35deg);
+        ">
+
+        Si
+
+    </div>
+
+
+    <div
+        class="element ca"
+        data-element="Ca"
+        style="
+            right: 9%;
+            top: 14%;
+            transform: rotate(45deg);
+        ">
+
+        Ca
+
+    </div>
+
+
+    <div
+        class="element o"
+        data-element="O"
+        style="
+            right: 5%;
+            top: 41%;
+            transform: rotate(-30deg);
+        ">
+
+        O
+
+    </div>
+
+
+    <div
+        class="element zn"
+        data-element="Zn"
+        style="
+            right: 8%;
+            top: 62%;
+            transform: rotate(17deg);
+        ">
+
+        Zn
+
+    </div>
+
+
+    <div
+        class="element al"
+        data-element="Al"
+        style="
+            right: 17%;
+            bottom: 7%;
+            transform: rotate(15deg);
+        ">
+
+        Al
+
+    </div>
+
+
+    <div
+        class="element mg"
+        data-element="Mg"
+        style="
+            left: 43%;
+            bottom: 6%;
+            transform: rotate(45deg);
+        ">
+
+        Mg
+
+    </div>
+
+
+    <div
+        class="element p"
+        data-element="P"
+        style="
+            left: 6%;
+            bottom: 12%;
+            transform: rotate(-30deg);
+        ">
+
+        P
+
+    </div>
+
+
+    <div
+        class="element k"
+        data-element="K"
+        style="
+            left: 5%;
+            top: 33%;
+            transform: rotate(45deg);
+        ">
+
+        K
+
+    </div>
+
+
+    <!-- =====================================================
+         PINK EXPERIMENT AREA
+    ====================================================== -->
+
+    <section
+        class="experiment-area"
+        id="experimentArea">
+
+
+        <div
+            class="drop-message"
+            id="dropMessage">
+
+            Pick 2 elements to begin
+
+            <span>
+
+                Drag them into the pink area
+
+            </span>
+
+        </div>
+
+
+        <!-- RESULT -->
+
+        <div
+            class="result-card"
+            id="resultCard">
+
+
+            <div
+                class="compound-image"
+                id="compoundImage"
+                data-label="?">
+
+            </div>
+
+
+            <h2 id="formula">
+
+                NaCl
+
+            </h2>
+
+
+            <p
+                class="full-name"
+                id="fullName">
+
+                Sodium Chloride
+
+            </p>
+
+
+            <div class="result-details">
+
+                Colour:
+
+                <span
+                    class="colour-dot"
+                    id="colourDot">
+                </span>
+
+                <span id="colourText">
+
+                    White
+
+                </span>
+
+            </div>
+
+
+        </div>
+
+
+        <!-- RESET -->
+
+        <button
+            class="reset-button"
+            id="resetButton"
+            onclick="resetExperiment()">
+
+            Try another combination
+
+        </button>
+
+
+        <div
+            class="success-message"
+            id="successMessage">
+
+            ✨ Compound discovered!
+
+        </div>
+
+
+    </section>
+
+
+</div>
+
+
+
+<script>
+
+
+/* =========================================================
+   COMPOUND DATABASE
+========================================================= */
+
+const compounds = {
+
+
+    "Cl-Na": {
+
+        formula: "NaCl",
+
+        name: "Sodium Chloride",
+
+        colour: "White",
+
+        colourCode: "#EEEEEE",
+
+        imageLabel: "NaCl"
+
+    },
+
+
+    "Na-O": {
+
+        formula: "Na₂O",
+
+        name: "Sodium Oxide",
+
+        colour: "White",
+
+        colourCode: "#EEEEEE",
+
+        imageLabel: "Na₂O"
+
+    },
+
+
+    "Na-P": {
+
+        formula: "Na₃P",
+
+        name: "Sodium Phosphide",
+
+        colour: "Dark grey",
+
+        colourCode: "#555555",
+
+        imageLabel: "Na₃P"
+
+    },
+
+
+    "K-Cl": {
+
+        formula: "KCl",
+
+        name: "Potassium Chloride",
+
+        colour: "White",
+
+        colourCode: "#EEEEEE",
+
+        imageLabel: "KCl"
+
+    },
+
+
+    "K-O": {
+
+        formula: "K₂O",
+
+        name: "Potassium Oxide",
+
+        colour: "Pale yellow",
+
+        colourCode: "#E6DC70",
+
+        imageLabel: "K₂O"
+
+    },
+
+
+    "K-P": {
+
+        formula: "K₃P",
+
+        name: "Potassium Phosphide",
+
+        colour: "Red-brown",
+
+        colourCode: "#9B4D32",
+
+        imageLabel: "K₃P"
+
+    },
+
+
+    "Ca-Cl": {
+
+        formula: "CaCl₂",
+
+        name: "Calcium Chloride",
+
+        colour: "White",
+
+        colourCode: "#EEEEEE",
+
+        imageLabel: "CaCl₂"
+
+    },
+
+
+    "Ca-O": {
+
+        formula: "CaO",
+
+        name: "Calcium Oxide",
+
+        colour: "White",
+
+        colourCode: "#EEEEEE",
+
+        imageLabel: "CaO"
+
+    },
+
+
+    "Ca-P": {
+
+        formula: "Ca₃P₂",
+
+        name: "Calcium Phosphide",
+
+        colour: "Grey",
+
+        colourCode: "#777777",
+
+        imageLabel: "Ca₃P₂"
+
+    },
+
+
+    "Al-Cl": {
+
+        formula: "AlCl₃",
+
+        name: "Aluminium Chloride",
+
+        colour: "White",
+
+        colourCode: "#EEEEEE",
+
+        imageLabel: "AlCl₃"
+
+    },
+
+
+    "Al-O": {
+
+        formula: "Al₂O₃",
+
+        name: "Aluminium Oxide",
+
+        colour: "White",
+
+        colourCode: "#EEEEEE",
+
+        imageLabel: "Al₂O₃"
+
+    },
+
+
+    "Al-P": {
+
+        formula: "AlP",
+
+        name: "Aluminium Phosphide",
+
+        colour: "Yellow",
+
+        colourCode: "#D7C800",
+
+        imageLabel: "AlP"
+
+    },
+
+
+    "Mg-Cl": {
+
+        formula: "MgCl₂",
+
+        name: "Magnesium Chloride",
+
+        colour: "White",
+
+        colourCode: "#EEEEEE",
+
+        imageLabel: "MgCl₂"
+
+    },
+
+
+    "Mg-O": {
+
+        formula: "MgO",
+
+        name: "Magnesium Oxide",
+
+        colour: "White",
+
+        colourCode: "#EEEEEE",
+
+        imageLabel: "MgO"
+
+    },
+
+
+    "Mg-P": {
+
+        formula: "Mg₃P₂",
+
+        name: "Magnesium Phosphide",
+
+        colour: "Grey",
+
+        colourCode: "#777777",
+
+        imageLabel: "Mg₃P₂"
+
+    },
+
+
+    "O-Si": {
+
+        formula: "SiO₂",
+
+        name: "Silicon Dioxide",
+
+        colour: "White",
+
+        colourCode: "#EEEEEE",
+
+        imageLabel: "SiO₂"
+
+    },
+
+
+    "Cl-Si": {
+
+        formula: "SiCl₄",
+
+        name: "Silicon Tetrachloride",
+
+        colour: "Colourless",
+
+        colourCode: "#EEEEEE",
+
+        imageLabel: "SiCl₄"
+
+    },
+
+
+    "Cl-Zn": {
+
+        formula: "ZnCl₂",
+
+        name: "Zinc Chloride",
+
+        colour: "White",
+
+        colourCode: "#EEEEEE",
+
+        imageLabel: "ZnCl₂"
+
+    },
+
+
+    "O-Zn": {
+
+        formula: "ZnO",
+
+        name: "Zinc Oxide",
+
+        colour: "White",
+
+        colourCode: "#EEEEEE",
+
+        imageLabel: "ZnO"
+
+    },
+
+
+    "P-Zn": {
+
+        formula: "Zn₃P₂",
+
+        name: "Zinc Phosphide",
+
+        colour: "White",
+
+        colourCode: "#EEEEEE",
+
+        imageLabel: "Zn₃P₂"
+
+    },
+
+
+    "Cl-P": {
+
+        formula: "PCl₃",
+
+        name: "Phosphorus Trichloride",
+
+        colour: "Colourless",
+
+        colourCode: "#EEEEEE",
+
+        imageLabel: "PCl₃"
+
+    }
+
+};
+
+
+
+/* =========================================================
+   VARIABLES
+========================================================= */
+
+let selectedElements = [];
+
+let draggedElement = null;
+
+let pointerOffsetX = 0;
+
+let pointerOffsetY = 0;
+
+
+const experimentArea =
+
+    document.getElementById(
+        "experimentArea"
+    );
+
+
+const resultCard =
+
+    document.getElementById(
+        "resultCard"
+    );
+
+
+const dropMessage =
+
+    document.getElementById(
+        "dropMessage"
+    );
+
+
+const resetButton =
+
+    document.getElementById(
+        "resetButton"
+    );
+
+
+const successMessage =
+
+    document.getElementById(
+        "successMessage"
+    );
+
+
+
+/* =========================================================
+   SET UP EVERY SPRINKLE
+========================================================= */
+
+document
+    .querySelectorAll(".element")
+    .forEach(element => {
+
+
+        element.addEventListener(
+            "pointerdown",
+            startDrag
+        );
+
+
+        element.addEventListener(
+            "dblclick",
+            function() {
+
+                toggleElement(
+                    this
+                );
+
+            }
+        );
+
+    });
+
+
+
+/* =========================================================
+   START DRAG
+========================================================= */
+
+function startDrag(event) {
+
+    event.preventDefault();
+
+    draggedElement = this;
+
+    draggedElement.classList.add(
+        "dragging"
+    );
+
+
+    const rect =
+        draggedElement.getBoundingClientRect();
+
+
+    pointerOffsetX =
+        event.clientX - rect.left;
+
+
+    pointerOffsetY =
+        event.clientY - rect.top;
+
+
+    draggedElement.setPointerCapture(
+        event.pointerId
+    );
+
+
+    draggedElement.addEventListener(
+        "pointermove",
+        moveDrag
+    );
+
+
+    draggedElement.addEventListener(
+        "pointerup",
+        endDrag
+    );
+
+}
+
+
+
+/* =========================================================
+   MOVE ELEMENT
+========================================================= */
+
+function moveDrag(event) {
+
+    if (!draggedElement) {
+        return;
+    }
+
+
+    const pageRect =
+        document
+            .querySelector(".page")
+            .getBoundingClientRect();
+
+
+    let newLeft =
+        event.clientX
+        - pageRect.left
+        - pointerOffsetX;
+
+
+    let newTop =
+        event.clientY
+        - pageRect.top
+        - pointerOffsetY;
+
+
+    /* Keep sprinkle on screen */
+
+    const maxLeft =
+        pageRect.width
+        - draggedElement.offsetWidth;
+
+
+    const maxTop =
+        pageRect.height
+        - draggedElement.offsetHeight;
+
+
+    newLeft =
+        Math.max(
+            0,
+            Math.min(
+                newLeft,
+                maxLeft
+            )
+        );
+
+
+    newTop =
+        Math.max(
+            0,
+            Math.min(
+                newTop,
+                maxTop
+            )
+        );
+
+
+    draggedElement.style.left =
+        newLeft + "px";
+
+
+    draggedElement.style.top =
+        newTop + "px";
+
+
+    draggedElement.style.right =
+        "auto";
+
+
+    draggedElement.style.bottom =
+        "auto";
+
+
+    draggedElement.style.transform =
+        "rotate(0deg)";
+
+
+    /* Highlight pink box */
+
+    const areaRect =
+        experimentArea.getBoundingClientRect();
+
+
+    const centerX =
+        event.clientX;
+
+
+    const centerY =
+        event.clientY;
+
+
+    const inside =
+
+        centerX >= areaRect.left &&
+
+        centerX <= areaRect.right &&
+
+        centerY >= areaRect.top &&
+
+        centerY <= areaRect.bottom;
+
+
+    if (inside) {
+
+        experimentArea.classList.add(
+            "drag-over"
+        );
+
+    } else {
+
+        experimentArea.classList.remove(
+            "drag-over"
+        );
+
+    }
+
+}
+
+
+
+/* =========================================================
+   END DRAG
+========================================================= */
+
+function endDrag(event) {
+
+    if (!draggedElement) {
+        return;
+    }
+
+
+    draggedElement.releasePointerCapture(
+        event.pointerId
+    );
+
+
+    draggedElement.removeEventListener(
+        "pointermove",
+        moveDrag
+    );
+
+
+    draggedElement.removeEventListener(
+        "pointerup",
+        endDrag
+    );
+
+
+    draggedElement.classList.remove(
+        "dragging"
+    );
+
+
+    experimentArea.classList.remove(
+        "drag-over"
+    );
+
+
+    const areaRect =
+        experimentArea.getBoundingClientRect();
+
+
+    const elementRect =
+        draggedElement.getBoundingClientRect();
+
+
+    const centerX =
+        elementRect.left
+        + elementRect.width / 2;
+
+
+    const centerY =
+        elementRect.top
+        + elementRect.height / 2;
+
+
+    const inside =
+
+        centerX >= areaRect.left &&
+
+        centerX <= areaRect.right &&
+
+        centerY >= areaRect.top &&
+
+        centerY <= areaRect.bottom;
+
+
+    const elementName =
+        draggedElement.dataset.element;
+
+
+    if (inside) {
+
+        selectElement(
+            draggedElement
+        );
+
+    } else {
+
+        removeElement(
+            draggedElement
+        );
+
+    }
+
+
+    draggedElement = null;
+
+}
+
+
+
+/* =========================================================
+   SELECT ELEMENT
+========================================================= */
+
+function selectElement(element) {
+
+
+    const name =
+        element.dataset.element;
+
+
+    /* Already selected */
+
+    if (
+        selectedElements.includes(
+            name
+        )
+    ) {
+
+        return;
+
+    }
+
+
+    /* Maximum 2 */
+
+    if (
+        selectedElements.length >= 2
+    ) {
+
+        return;
+
+    }
+
+
+    selectedElements.push(
+        name
+    );
+
+
+    element.classList.add(
+        "selected"
+    );
+
+
+    updateExperiment();
+
+}
+
+
+
+/* =========================================================
+   REMOVE ELEMENT
+========================================================= */
+
+function removeElement(element) {
+
+
+    const name =
+        element.dataset.element;
+
+
+    const index =
+        selectedElements.indexOf(
+            name
+        );
+
+
+    if (index !== -1) {
+
+        selectedElements.splice(
+            index,
+            1
+        );
+
+    }
+
+
+    element.classList.remove(
+        "selected"
+    );
+
+
+    hideResult();
+
+
+    updateInstruction();
+
+}
+
+
+
+/* =========================================================
+   DOUBLE CLICK BACKUP
+========================================================= */
+
+function toggleElement(element) {
+
+
+    const name =
+        element.dataset.element;
+
+
+    if (
+        selectedElements.includes(
+            name
+        )
+    ) {
+
+        removeElement(
+            element
+        );
+
+        return;
+
+    }
+
+
+    selectElement(
+        element
+    );
+
+}
+
+
+
+/* =========================================================
+   UPDATE EXPERIMENT
+========================================================= */
+
+function updateExperiment() {
+
+
+    if (
+        selectedElements.length === 0
+    ) {
+
+        dropMessage.innerHTML =
+
+            `Pick 2 elements to begin
+            <span>
+                Drag them into the pink area
+            </span>`;
+
+        dropMessage.style.display =
+            "block";
+
+        hideResult();
+
+        return;
+
+    }
+
+
+    if (
+        selectedElements.length === 1
+    ) {
+
+        dropMessage.innerHTML =
+
+            `Great! Pick 1 more element
+            <span>
+                Drag another sprinkle into the box
+            </span>`;
+
+        dropMessage.style.display =
+            "block";
+
+        hideResult();
+
+        return;
+
+    }
+
+
+    if (
+        selectedElements.length === 2
+    ) {
+
+        dropMessage.style.display =
+            "none";
+
+        showCompound();
+
+    }
+
+}
+
+
+
+/* =========================================================
+   UPDATE INSTRUCTION
+========================================================= */
+
+function updateInstruction() {
+
+
+    if (
+        selectedElements.length === 0
+    ) {
+
+        dropMessage.innerHTML =
+
+            `Pick 2 elements to begin
+            <span>
+                Drag them into the pink area
+            </span>`;
+
+    }
+
+
+    else if (
+        selectedElements.length === 1
+    ) {
+
+        dropMessage.innerHTML =
+
+            `Great! Pick 1 more element
+            <span>
+                Drag another sprinkle into the box
+            </span>`;
+
+    }
+
+
+    dropMessage.style.display =
+        "block";
+
+}
+
+
+
+/* =========================================================
+   SHOW COMPOUND
+========================================================= */
+
+function showCompound() {
+
+
+    const sorted =
+
+        [...selectedElements]
+            .sort()
+            .join("-");
+
+
+    const compound =
+        compounds[sorted];
+
+
+    /* =====================================================
+       UNKNOWN
+    ===================================================== */
+
+    if (!compound) {
+
+
+        document.getElementById(
+            "formula"
+        ).textContent =
+
+            "Let's explore!";
+
+
+        document.getElementById(
+            "fullName"
+        ).textContent =
+
+            "This combination is not in our current experiment set.";
+
+
+        document.getElementById(
+            "colourText"
+        ).textContent =
+
+            "Unknown";
+
+
+        document.getElementById(
+            "colourDot"
+        ).style.background =
+
+            "#999999";
+
+
+        document.getElementById(
+            "compoundImage"
+        ).setAttribute(
+            "data-label",
+            "?"
+        );
+
+
+        resultCard.classList.add(
+            "show"
+        );
+
+
+        resetButton.classList.add(
+            "show"
+        );
+
+
+        return;
+
+    }
+
+
+    /* =====================================================
+       FORMULA
+    ===================================================== */
+
+    document.getElementById(
+        "formula"
+    ).textContent =
+
+        compound.formula;
+
+
+    /* =====================================================
+       NAME
+    ===================================================== */
+
+    document.getElementById(
+        "fullName"
+    ).textContent =
+
+        compound.name;
+
+
+    /* =====================================================
+       COLOUR
+    ===================================================== */
+
+    document.getElementById(
+        "colourText"
+    ).textContent =
+
+        compound.colour;
+
+
+    document.getElementById(
+        "colourDot"
+    ).style.background =
+
+        compound.colourCode;
+
+
+    /* =====================================================
+       IMAGE PLACEHOLDER
+    ===================================================== */
+
+    document.getElementById(
+        "compoundImage"
+    ).setAttribute(
+        "data-label",
+        compound.imageLabel
+    );
+
+
+    /* =====================================================
+       SHOW
+    ===================================================== */
+
+    resultCard.classList.add(
+        "show"
+    );
+
+
+    resetButton.classList.add(
+        "show"
+    );
+
+
+    successMessage.style.display =
+        "block";
+
+
+}
+
+
+
+/* =========================================================
+   HIDE RESULT
+========================================================= */
+
+function hideResult() {
+
+
+    resultCard.classList.remove(
+        "show"
+    );
+
+
+    resetButton.classList.remove(
+        "show"
+    );
+
+
+    successMessage.style.display =
+        "none";
+
+}
+
+
+
+/* =========================================================
+   RESET
+========================================================= */
+
+function resetExperiment() {
+
+
+    selectedElements = [];
+
+
+    document
+        .querySelectorAll(".element")
+        .forEach(element => {
+
+            element.classList.remove(
+                "selected"
+            );
+
+        });
+
+
+    hideResult();
+
+
+    dropMessage.style.display =
+        "block";
+
+
+    dropMessage.innerHTML =
+
+        `Pick 2 elements to begin
+        <span>
+            Drag them into the pink area
+        </span>`;
+
+}
+
+
+
+/* =========================================================
+   HOME
+========================================================= */
+
+function goHome() {
+
+    alert(
+        "Your Trellis home page will go here."
+    );
+
+}
+
+
+
+/* =========================================================
+   BACK
+========================================================= */
+
+function goHome() {
+
+    window.location.href = "index.html";
+
+}
+
+</script>
+
+
+</body>
+
+</html>

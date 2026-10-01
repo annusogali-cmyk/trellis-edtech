@@ -1,0 +1,869 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Trellis — Chemistry</title>
+
+    <!-- Switzer -->
+    <link
+        href="https://api.fontshare.com/v2/css?f[]=switzer@400,500,600,700&display=swap"
+        rel="stylesheet"
+    >
+
+    <style>
+
+        /* ==========================================
+           TRELLIS COLOURS
+        ========================================== */
+
+        :root {
+            --orange: #FFAD01;
+            --yellow: #CBC308;
+            --pink: #F2AFE2;
+            --magenta: #F03272;
+            --blue: #9AB3EB;
+            --dark: #1F1D1D;
+        }
+
+
+        /* ==========================================
+           RESET
+        ========================================== */
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+
+        body {
+
+            font-family: "Switzer", sans-serif;
+
+            background: var(--dark);
+
+            color: white;
+
+            min-height: 100vh;
+
+            overflow: hidden;
+
+        }
+
+
+        /* ==========================================
+           PAGE
+        ========================================== */
+
+        .page {
+
+            width: 100vw;
+            height: 100vh;
+
+            padding: 45px 5vw;
+
+            position: relative;
+
+        }
+
+
+        /* ==========================================
+           HEADER
+        ========================================== */
+
+        .header {
+
+            display: flex;
+
+            justify-content: space-between;
+
+            align-items: flex-start;
+
+        }
+
+
+        .title h1 {
+
+            font-size: 52px;
+
+            line-height: .95;
+
+            font-weight: 600;
+
+            letter-spacing: -2px;
+
+        }
+
+
+        .title h2 {
+
+            color: var(--pink);
+
+            font-size: 31px;
+
+            font-weight: 500;
+
+            margin-top: 8px;
+
+        }
+
+
+        /* ==========================================
+           HOME BUTTON
+        ========================================== */
+
+        .home-button {
+
+            width: 70px;
+
+            height: 70px;
+
+            border: none;
+
+            border-radius: 50%;
+
+            background: var(--blue);
+
+            font-size: 30px;
+
+            cursor: pointer;
+
+            transition: .25s ease;
+
+        }
+
+
+        .home-button:hover {
+
+            transform: scale(1.08);
+
+        }
+
+
+        /* ==========================================
+           MARATHON QUIZ
+        ========================================== */
+
+        .marathon {
+
+            width: 310px;
+
+            height: 92px;
+
+            margin-left: auto;
+
+            margin-top: 10px;
+
+            margin-right: 35px;
+
+            background: var(--magenta);
+
+            border-radius: 15px;
+
+            padding: 13px 16px;
+
+            position: relative;
+
+            overflow: hidden;
+
+            cursor: pointer;
+
+            transition: .25s ease;
+
+        }
+
+
+        .marathon:hover {
+
+            transform: translateY(-5px);
+
+        }
+
+
+        .marathon h3 {
+
+            font-size: 25px;
+
+            line-height: .95;
+
+            font-weight: 600;
+
+        }
+
+
+        /* temporary character */
+
+        .character {
+
+            position: absolute;
+
+            right: 15px;
+
+            bottom: 0;
+
+            width: 80px;
+
+            height: 75px;
+
+            background: #FFEBD7;
+
+            border-radius: 50% 50% 35% 35%;
+
+            border-bottom: 14px solid var(--orange);
+
+        }
+
+
+        .character::before {
+
+            content: "";
+
+            position: absolute;
+
+            width: 65px;
+
+            height: 65px;
+
+            background: #71301E;
+
+            border-radius: 50% 50% 30% 30%;
+
+            top: -5px;
+
+            left: 8px;
+
+            z-index: -1;
+
+        }
+
+
+        /* ==========================================
+           ACTIVITY GRID
+        ========================================== */
+
+        .activities {
+
+            display: grid;
+
+            grid-template-columns:
+
+                repeat(4, 1fr);
+
+            gap: 20px;
+
+            margin-top: 27px;
+
+            width: 100%;
+
+        }
+
+
+        /* ==========================================
+           ACTIVITY CARD
+        ========================================== */
+
+        .activity {
+
+            height: 250px;
+
+            border-radius: 16px;
+
+            padding: 17px;
+
+            position: relative;
+
+            overflow: hidden;
+
+            color: #111;
+
+            cursor: pointer;
+
+            transition:
+
+                transform .3s ease,
+
+                box-shadow .3s ease;
+
+        }
+
+
+        .activity:hover {
+
+            transform:
+
+                translateY(-8px)
+                scale(1.02);
+
+            box-shadow:
+
+                0 18px 35px
+                rgba(0,0,0,.25);
+
+        }
+
+
+        .activity h3 {
+
+            font-size: 27px;
+
+            line-height: 1;
+
+            font-weight: 600;
+
+            letter-spacing: -1px;
+
+        }
+
+
+        /* CARD COLOURS */
+
+        .video {
+
+            background: var(--pink);
+
+        }
+
+
+        .sand {
+
+            background: var(--yellow);
+
+        }
+
+
+        .flash {
+
+            background: var(--orange);
+
+        }
+
+
+        .rapid {
+
+            background: var(--blue);
+
+        }
+
+
+        /* ==========================================
+           ILLUSTRATIONS
+        ========================================== */
+
+        .illustration {
+
+            position: absolute;
+
+            left: 50%;
+
+            bottom: 12px;
+
+            transform: translateX(-50%);
+
+            width: 150px;
+
+            height: 105px;
+
+        }
+
+
+        /* VIDEO */
+
+        .carousel {
+
+            position: absolute;
+
+            left: 15px;
+
+            bottom: 5px;
+
+            width: 120px;
+
+            height: 55px;
+
+            border: 8px solid #357CE4;
+
+            border-radius: 50%;
+
+        }
+
+
+        .carousel::before {
+
+            content: "";
+
+            position: absolute;
+
+            width: 9px;
+
+            height: 65px;
+
+            background: #357CE4;
+
+            left: 46px;
+
+            top: -35px;
+
+            border-radius: 10px;
+
+        }
+
+
+        .carousel::after {
+
+            content: "";
+
+            position: absolute;
+
+            width: 75px;
+
+            height: 9px;
+
+            background: #FF6347;
+
+            left: 15px;
+
+            top: 17px;
+
+            transform: rotate(-20deg);
+
+        }
+
+
+        /* SAND PIT */
+
+        .sandpit {
+
+            position: absolute;
+
+            width: 125px;
+
+            height: 48px;
+
+            left: 10px;
+
+            bottom: 8px;
+
+            background: #F5D58B;
+
+            border: 7px solid #347CE8;
+
+            border-radius: 8px;
+
+        }
+
+
+        .sandpit::before {
+
+            content: "";
+
+            position: absolute;
+
+            width: 15px;
+
+            height: 50px;
+
+            background: #FF6748;
+
+            left: 40px;
+
+            top: -38px;
+
+            transform: rotate(18deg);
+
+            border-radius: 5px;
+
+        }
+
+
+        .sandpit::after {
+
+            content: "";
+
+            position: absolute;
+
+            width: 25px;
+
+            height: 15px;
+
+            background: #65A735;
+
+            right: 10px;
+
+            top: -7px;
+
+            border-radius: 50%;
+
+        }
+
+
+        /* FLASH CARDS */
+
+        .flashcards {
+
+            position: absolute;
+
+            left: 25px;
+
+            bottom: 4px;
+
+            width: 105px;
+
+            height: 82px;
+
+            border-left: 7px solid #65A735;
+
+            border-right: 7px solid #65A735;
+
+        }
+
+
+        .flashcards::before {
+
+            content: "";
+
+            position: absolute;
+
+            width: 100px;
+
+            height: 7px;
+
+            background: #65A735;
+
+            top: 0;
+
+            left: -4px;
+
+        }
+
+
+        .flashcards::after {
+
+            content: "";
+
+            position: absolute;
+
+            width: 45px;
+
+            height: 30px;
+
+            border-left: 5px solid var(--pink);
+
+            border-right: 5px solid var(--pink);
+
+            left: 26px;
+
+            top: 5px;
+
+        }
+
+
+        /* RAPID FIRE */
+
+        .slide {
+
+            position: absolute;
+
+            right: 0;
+
+            bottom: 0;
+
+            width: 75px;
+
+            height: 90px;
+
+            border-right: 12px solid #FF6848;
+
+            border-bottom: 12px solid #FF6848;
+
+            border-radius: 0 0 35px 0;
+
+        }
+
+
+        .slide::before {
+
+            content: "";
+
+            position: absolute;
+
+            width: 28px;
+
+            height: 70px;
+
+            background: #FFD447;
+
+            right: 15px;
+
+            top: 4px;
+
+            transform: rotate(25deg);
+
+            border-radius: 18px;
+
+        }
+
+
+        /* ==========================================
+           RESPONSIVE
+        ========================================== */
+
+        @media(max-width: 900px) {
+
+            .activities {
+
+                grid-template-columns:
+
+                    repeat(2, 1fr);
+
+            }
+
+        }
+
+
+        @media(max-width: 600px) {
+
+            body {
+
+                overflow-y: auto;
+
+            }
+
+            .page {
+
+                height: auto;
+
+            }
+
+            .activities {
+
+                grid-template-columns: 1fr;
+
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<div class="page">
+
+
+    <!-- ==========================================
+         HEADER
+    =========================================== -->
+
+    <header class="header">
+
+        <div class="title">
+
+            <h1>
+                Periodic Table
+            </h1>
+
+            <h2>
+                Chemistry
+            </h2>
+
+        </div>
+
+
+        <button
+            class="home-button"
+            onclick="goHome()">
+
+            🏠
+
+        </button>
+
+    </header>
+
+
+
+    <!-- ==========================================
+         MARATHON QUIZ
+    =========================================== -->
+
+    <section
+        class="marathon"
+        onclick="openMarathon()">
+
+        <h3>
+            Marathon<br>
+            Quiz
+        </h3>
+
+        <div class="character"></div>
+
+    </section>
+
+
+
+    <!-- ==========================================
+         ACTIVITY CARDS
+    =========================================== -->
+
+    <section class="activities">
+
+
+        <!-- VIDEO LESSONS -->
+
+        <article
+            class="activity video"
+            onclick="openVideo()">
+
+            <h3>
+                Video<br>
+                Lessons
+            </h3>
+
+            <div class="illustration">
+
+                <div class="carousel"></div>
+
+            </div>
+
+        </article>
+
+
+
+        <!-- SAND PIT -->
+
+        <article
+            class="activity sand"
+            onclick="openSandPit()">
+
+            <h3>
+                Sand Pit<br>
+                Experiment
+            </h3>
+
+            <div class="illustration">
+
+                <div class="sandpit"></div>
+
+            </div>
+
+        </article>
+
+
+
+        <!-- FLASH CARDS -->
+
+        <article
+            class="activity flash"
+            onclick="openFlashCards()">
+
+            <h3>
+                Flash<br>
+                Cards
+            </h3>
+
+            <div class="illustration">
+
+                <div class="flashcards"></div>
+
+            </div>
+
+        </article>
+
+
+
+        <!-- RAPID FIRE -->
+
+        <article
+            class="activity rapid"
+            onclick="openRapidFire()">
+
+            <h3>
+                Rapid Fire
+            </h3>
+
+            <div class="illustration">
+
+                <div class="slide"></div>
+
+            </div>
+
+        </article>
+
+
+    </section>
+
+
+</div>
+
+
+
+<script>
+
+
+    /* ==========================================
+       SAND PIT
+    ========================================== */
+
+    function openSandPit() {
+
+        window.location.href =
+            "sandpit.html";
+
+    }
+
+
+    /* ==========================================
+       FUTURE FEATURES
+    ========================================== */
+
+   function openVideo() {
+    window.location.href = "video.html";
+}
+
+
+    function openFlashCards() {
+
+        alert(
+            "Flash Cards — coming next!"
+        );
+
+    }
+
+
+    function openRapidFire() {
+    window.location.href = "rapidfire.html";
+}
+
+
+    function openMarathon() {
+
+        alert(
+            "Marathon Quiz — coming next!"
+        );
+
+    }
+
+
+    function goHome() {
+
+        alert(
+            "This is your Chemistry home."
+        );
+
+    }
+
+
+</script>
+
+
+</body>
+
+</html>

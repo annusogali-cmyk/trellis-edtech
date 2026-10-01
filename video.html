@@ -1,0 +1,650 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Video Lessons | Trellis</title>
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Switzer:wght@400;500;600;700;800&display=swap');
+
+:root {
+    --orange: #FFAD01;
+    --yellow: #CBC308;
+    --pink: #F2AFE2;
+    --magenta: #F03272;
+    --blue: #9AB3EB;
+    --dark: #1F1D1D;
+    --cream: #FFF7E8;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Switzer', sans-serif;
+    background: var(--dark);
+    color: white;
+    min-height: 100vh;
+}
+
+/* ---------------- HEADER ---------------- */
+
+.header {
+    text-align: center;
+    padding-top: 35px;
+}
+
+.header h1 {
+    font-size: 46px;
+    font-weight: 800;
+}
+
+.header p {
+    margin-top: 8px;
+    font-size: 21px;
+    color: var(--pink);
+    font-weight: 500;
+}
+
+/* ---------------- NAV BUTTONS ---------------- */
+
+.back-button,
+.home-button {
+    position: fixed;
+    top: 25px;
+
+    width: 48px;
+    height: 48px;
+
+    border-radius: 50%;
+    border: none;
+
+    font-size: 22px;
+    font-weight: bold;
+
+    cursor: pointer;
+    z-index: 20;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.back-button {
+    left: 25px;
+    background: white;
+    color: var(--dark);
+}
+
+.home-button {
+    right: 25px;
+    background: var(--blue);
+    color: var(--dark);
+}
+
+/* ---------------- MAIN LESSON CARD ---------------- */
+
+.lesson-card {
+    width: 82%;
+    max-width: 1060px;
+
+    margin: 45px auto 30px;
+
+    background: var(--pink);
+
+    border-radius: 28px;
+
+    padding: 25px;
+
+    color: var(--dark);
+}
+
+/* ---------------- LESSON TOP ---------------- */
+
+.lesson-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    margin-bottom: 20px;
+}
+
+.topic-pill {
+    background: var(--blue);
+
+    padding: 9px 20px;
+
+    border-radius: 30px;
+
+    font-size: 15px;
+    font-weight: 700;
+}
+
+.lesson-number {
+    font-size: 16px;
+    font-weight: 700;
+}
+
+/* ---------------- VIDEO + INFO ---------------- */
+
+.lesson-content {
+    display: flex;
+    align-items: center;
+    gap: 30px;
+}
+
+/* REAL VIDEO BOX */
+
+.video-container {
+    width: 58%;
+    aspect-ratio: 16 / 9;
+
+    background: #000;
+
+    border-radius: 22px;
+
+    overflow: hidden;
+
+    flex-shrink: 0;
+}
+
+.video-container iframe {
+    width: 100%;
+    height: 100%;
+
+    border: none;
+
+    display: block;
+}
+
+/* ---------------- INFO ---------------- */
+
+.lesson-info {
+    flex: 1;
+}
+
+.lesson-info .play-icon {
+    font-size: 22px;
+    margin-bottom: 10px;
+}
+
+.lesson-info h2 {
+    font-size: 27px;
+    line-height: 1.15;
+
+    margin-bottom: 12px;
+
+    font-weight: 800;
+}
+
+.lesson-info p {
+    font-size: 17px;
+    line-height: 1.45;
+}
+
+/* ---------------- PROGRESS ---------------- */
+
+.progress-section {
+    margin-top: 25px;
+}
+
+.progress-bar {
+    width: 100%;
+    height: 9px;
+
+    background: rgba(31,29,29,0.18);
+
+    border-radius: 20px;
+
+    overflow: hidden;
+}
+
+.progress-fill {
+    height: 100%;
+
+    width: 33.33%;
+
+    background: var(--magenta);
+
+    border-radius: 20px;
+
+    transition: width 0.3s ease;
+}
+
+/* ---------------- TOPIC BUTTONS ---------------- */
+
+.topic-buttons {
+    display: flex;
+    gap: 10px;
+
+    margin-top: 15px;
+}
+
+.topic-button {
+    border: none;
+
+    padding: 9px 16px;
+
+    border-radius: 20px;
+
+    background: rgba(255,255,255,0.45);
+
+    color: var(--dark);
+
+    font-family: inherit;
+
+    font-weight: 600;
+
+    cursor: pointer;
+
+    transition: 0.2s;
+}
+
+.topic-button:hover {
+    transform: translateY(-2px);
+}
+
+.topic-button.active {
+    background: var(--dark);
+    color: white;
+}
+
+/* ---------------- CONTROLS ---------------- */
+
+.controls {
+    width: 82%;
+    max-width: 1060px;
+
+    margin: 0 auto 40px;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.control-button {
+    border: none;
+
+    padding: 15px 28px;
+
+    border-radius: 18px;
+
+    font-family: inherit;
+
+    font-size: 16px;
+
+    font-weight: 700;
+
+    cursor: pointer;
+
+    transition: 0.2s;
+}
+
+.control-button:hover {
+    transform: translateY(-3px);
+}
+
+.previous {
+    background: var(--blue);
+    color: var(--dark);
+}
+
+.next {
+    background: var(--yellow);
+    color: var(--dark);
+}
+
+.control-button:disabled {
+    opacity: 0.35;
+    cursor: not-allowed;
+    transform: none;
+}
+
+/* ---------------- MOBILE ---------------- */
+
+@media (max-width: 800px) {
+
+    .header h1 {
+        font-size: 36px;
+    }
+
+    .lesson-card {
+        width: 92%;
+    }
+
+    .lesson-content {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .video-container {
+        width: 100%;
+    }
+
+    .controls {
+        width: 92%;
+    }
+
+    .lesson-info h2 {
+        font-size: 24px;
+    }
+}
+</style>
+</head>
+
+
+<body>
+
+<!-- BACK BUTTON -->
+<button class="back-button" onclick="goBack()">←</button>
+
+<!-- HOME BUTTON -->
+<button class="home-button" onclick="goHome()">⌂</button>
+
+
+<!-- HEADER -->
+
+<div class="header">
+    <h1>Video Lessons</h1>
+    <p>Watch. Explore. Grow.</p>
+</div>
+
+
+<!-- LESSON CARD -->
+
+<div class="lesson-card">
+
+    <div class="lesson-top">
+
+        <div class="topic-pill" id="topicName">
+            Chemistry
+        </div>
+
+        <div class="lesson-number" id="lessonNumber">
+            1 of 3
+        </div>
+
+    </div>
+
+
+    <div class="lesson-content">
+
+        <!-- YOUTUBE VIDEO -->
+
+        <div class="video-container">
+
+            <iframe
+                id="lessonVideo"
+                src="https://www.youtube.com/embed/kWa_zTldnhw"
+                title="What are Chemical Elements?"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                allowfullscreen>
+            </iframe>
+
+        </div>
+
+
+        <!-- LESSON INFORMATION -->
+
+        <div class="lesson-info">
+
+            <div class="play-icon">▶</div>
+
+            <h2 id="lessonTitle">
+                What are Chemical Elements?
+            </h2>
+
+            <p id="lessonDescription">
+                Learn what chemical elements are, how they are represented,
+                and why they are the building blocks of matter.
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <!-- PROGRESS -->
+
+    <div class="progress-section">
+
+        <div class="progress-bar">
+            <div class="progress-fill" id="progressFill"></div>
+        </div>
+
+    </div>
+
+
+    <!-- TOPIC QUICK BUTTONS -->
+
+    <div class="topic-buttons">
+
+        <button
+            class="topic-button active"
+            onclick="goToLesson(0)">
+            Elements
+        </button>
+
+        <button
+            class="topic-button"
+            onclick="goToLesson(1)">
+            Atom Size
+        </button>
+
+        <button
+            class="topic-button"
+            onclick="goToLesson(2)">
+            Compounds
+        </button>
+
+    </div>
+
+</div>
+
+
+<!-- PREVIOUS / NEXT -->
+
+<div class="controls">
+
+    <button
+        class="control-button previous"
+        id="previousButton"
+        onclick="previousLesson()">
+        ← Previous
+    </button>
+
+    <button
+        class="control-button next"
+        onclick="nextLesson()">
+        Next →
+    </button>
+
+</div>
+
+
+<script>
+
+/* =====================================================
+   LESSON DATA
+===================================================== */
+
+const lessons = [
+
+    {
+        title: "What are Chemical Elements?",
+
+        description:
+        "Learn what chemical elements are, how they are represented, and why they are the building blocks of matter.",
+
+        videoId: "kWa_zTldnhw"
+    },
+
+    {
+        title: "Atomic Size",
+
+        description:
+        "Learn what atomic size means and understand how the size of atoms changes across the periodic table.",
+
+        videoId: "4DSvaHgeTfU"
+    },
+
+    {
+        title: "Compounds",
+
+        description:
+        "Learn how compounds are formed and understand the difference between compounds and molecules.",
+
+        videoId: "zRiEecfWuSQ"
+    }
+
+];
+
+
+/* =====================================================
+   CURRENT LESSON
+===================================================== */
+
+let currentLesson = 0;
+
+
+/* =====================================================
+   LOAD LESSON
+===================================================== */
+
+function loadLesson(index) {
+
+    currentLesson = index;
+
+    const lesson = lessons[index];
+
+
+    /* Change YouTube video */
+
+    document.getElementById("lessonVideo").src =
+        "https://www.youtube.com/embed/" + lesson.videoId;
+
+
+    /* Change title */
+
+    document.getElementById("lessonTitle").textContent =
+        lesson.title;
+
+
+    /* Change description */
+
+    document.getElementById("lessonDescription").textContent =
+        lesson.description;
+
+
+    /* Change lesson number */
+
+    document.getElementById("lessonNumber").textContent =
+        (index + 1) + " of " + lessons.length;
+
+
+    /* Change progress */
+
+    const progress =
+        ((index + 1) / lessons.length) * 100;
+
+    document.getElementById("progressFill").style.width =
+        progress + "%";
+
+
+    /* Update topic buttons */
+
+    const buttons =
+        document.querySelectorAll(".topic-button");
+
+    buttons.forEach((button, i) => {
+
+        button.classList.toggle(
+            "active",
+            i === index
+        );
+
+    });
+
+
+    /* Disable previous on first lesson */
+
+    document.getElementById("previousButton").disabled =
+        index === 0;
+
+}
+
+
+/* =====================================================
+   NEXT
+===================================================== */
+
+function nextLesson() {
+
+    if (currentLesson < lessons.length - 1) {
+
+        loadLesson(currentLesson + 1);
+
+    }
+
+}
+
+
+/* =====================================================
+   PREVIOUS
+===================================================== */
+
+function previousLesson() {
+
+    if (currentLesson > 0) {
+
+        loadLesson(currentLesson - 1);
+
+    }
+
+}
+
+
+/* =====================================================
+   DIRECT TOPIC BUTTON
+===================================================== */
+
+function goToLesson(index) {
+
+    loadLesson(index);
+
+}
+
+
+/* =====================================================
+   NAVIGATION
+===================================================== */
+
+function goBack() {
+
+    window.location.href = "index.html";
+
+}
+
+
+function goHome() {
+
+    window.location.href = "index.html";
+
+}
+
+
+/* =====================================================
+   START
+===================================================== */
+
+loadLesson(0);
+
+</script>
+
+</body>
+</html>

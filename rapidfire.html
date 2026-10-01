@@ -1,0 +1,1317 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Trellis — Rapid Fire</title>
+
+    <link
+        href="https://api.fontshare.com/v2/css?f[]=switzer@400,500,600,700&display=swap"
+        rel="stylesheet"
+    >
+
+    <style>
+
+        :root {
+            --orange: #FFAD01;
+            --yellow: #CBC308;
+            --pink: #F2AFE2;
+            --magenta: #F03272;
+            --blue: #9AB3EB;
+            --dark: #1F1D1D;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: "Switzer", sans-serif;
+            background: var(--dark);
+            color: white;
+            width: 100vw;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        /* =========================================
+           PAGE
+        ========================================= */
+
+        .page {
+            width: 100vw;
+            height: 100vh;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* =========================================
+           BACK BUTTON
+        ========================================= */
+
+        .back-button {
+            position: absolute;
+            top: 28px;
+            left: 35px;
+
+            width: 62px;
+            height: 62px;
+
+            border: none;
+            border-radius: 50%;
+
+            background: #F4F4F4;
+            color: var(--dark);
+
+            font-size: 32px;
+            cursor: pointer;
+
+            z-index: 50;
+        }
+
+        .back-button:hover {
+            transform: scale(1.05);
+        }
+
+        /* =========================================
+           HOME
+        ========================================= */
+
+        .home-button {
+            position: absolute;
+            top: 28px;
+            right: 35px;
+
+            width: 76px;
+            height: 76px;
+
+            border: none;
+            border-radius: 50%;
+
+            background: var(--blue);
+
+            font-size: 30px;
+            cursor: pointer;
+
+            z-index: 50;
+        }
+
+        .home-button:hover {
+            transform: scale(1.05);
+        }
+
+        /* =========================================
+           HEADER
+        ========================================= */
+
+        .header {
+            position: absolute;
+
+            top: 35px;
+            left: 50%;
+
+            transform: translateX(-50%);
+
+            text-align: center;
+
+            z-index: 20;
+        }
+
+        .header h1 {
+            font-size: 38px;
+            font-weight: 600;
+            letter-spacing: -1px;
+        }
+
+        .header p {
+            margin-top: 7px;
+            font-size: 16px;
+        }
+
+        .header strong {
+            color: var(--pink);
+        }
+
+        /* =========================================
+           SUBJECT
+        ========================================= */
+
+        .subject-pill {
+            position: absolute;
+
+            top: 30px;
+            left: 115px;
+
+            padding: 9px 25px;
+
+            border-radius: 30px;
+
+            background: var(--blue);
+            color: var(--dark);
+
+            font-size: 14px;
+            font-weight: 600;
+
+            z-index: 30;
+        }
+
+        /* =========================================
+           QUESTION COUNTER
+        ========================================= */
+
+        .question-counter {
+            position: absolute;
+
+            top: 30px;
+            right: 130px;
+
+            padding: 9px 20px;
+
+            border-radius: 30px;
+
+            background: var(--blue);
+            color: var(--dark);
+
+            font-size: 14px;
+            font-weight: 600;
+
+            z-index: 30;
+        }
+
+        /* =========================================
+           TIMER
+        ========================================= */
+
+        .timer {
+            position: absolute;
+
+            top: 30px;
+            right: 30px;
+
+            min-width: 75px;
+
+            padding: 9px 17px;
+
+            border-radius: 30px;
+
+            background: var(--pink);
+            color: var(--dark);
+
+            font-size: 14px;
+            font-weight: 600;
+
+            text-align: center;
+
+            z-index: 30;
+        }
+
+       
+
+        /* =========================================
+           TIMER PATH
+        ========================================= */
+
+        .timer-path {
+            position: absolute;
+
+            left: -2%;
+            top: 17%;
+
+            width: 104%;
+            height: 64%;
+
+            z-index: 1;
+
+            pointer-events: none;
+        }
+
+        .timer-path svg {
+            width: 100%;
+            height: 100%;
+
+            overflow: visible;
+        }
+
+        /* subtle base */
+
+        .path-base {
+            fill: none;
+
+            stroke: #F03272;
+
+            stroke-width: 75;
+
+            stroke-linecap: round;
+        }
+
+        /* gradient */
+
+        .path-gradient {
+            fill: none;
+
+            stroke: url(#pathGradient);
+
+            stroke-width: 75;
+
+            stroke-linecap: round;
+        }
+
+        /* =========================================
+           TIMER BALL
+        ========================================= */
+
+        #timerBall {
+            fill: var(--blue);
+
+            stroke: var(--dark);
+
+            stroke-width: 4;
+
+            filter:
+                drop-shadow(
+                    0 7px 8px rgba(0,0,0,.2)
+                );
+        }
+
+        /* =========================================
+           QUESTION CARD
+        ========================================= */
+
+        .question-card {
+            position: absolute;
+
+            width: 430px;
+
+            min-height: 365px;
+
+            left: 50%;
+            top: 51%;
+
+            transform: translate(-50%, -50%);
+
+            background: #FFF8DE;
+
+            border-radius: 25px;
+
+            padding: 38px 32px 30px;
+
+            color: var(--dark);
+
+            z-index: 10;
+        }
+
+        /* =========================================
+           QUESTION
+        ========================================= */
+
+        .question {
+            text-align: center;
+
+            font-size: 25px;
+
+            line-height: 1.15;
+
+            font-weight: 600;
+
+            margin-bottom: 25px;
+        }
+
+        /* =========================================
+           ANSWERS
+        ========================================= */
+
+        .answers {
+            display: grid;
+
+            grid-template-columns: 1fr 1fr;
+
+            gap: 12px;
+        }
+
+        .answer {
+            min-height: 65px;
+
+            border: 3px solid transparent;
+
+            border-radius: 15px;
+
+            background: #FFFFFF;
+
+            color: var(--dark);
+
+            font-family: inherit;
+
+            font-size: 15px;
+
+            font-weight: 500;
+
+            padding: 12px;
+
+            cursor: pointer;
+
+            transition: .2s ease;
+        }
+
+        .answer:hover {
+            transform: translateY(-2px);
+        }
+
+        .answer.selected {
+            border-color: var(--yellow);
+        }
+
+        .answer.correct {
+            background: #91D77F;
+            border-color: #91D77F;
+        }
+
+        .answer.wrong {
+            background: var(--magenta);
+            border-color: var(--magenta);
+            color: white;
+        }
+
+        .answer.disabled {
+            pointer-events: none;
+        }
+
+        /* =========================================
+           FEEDBACK
+        ========================================= */
+
+        .feedback {
+            height: 25px;
+
+            margin-top: 12px;
+
+            text-align: center;
+
+            font-size: 13px;
+
+            font-weight: 600;
+        }
+
+        /* =========================================
+           BOTTOM BUTTONS
+        ========================================= */
+
+        .bottom-buttons {
+            position: absolute;
+
+            left: 45px;
+            right: 40px;
+            bottom: 30px;
+
+            display: flex;
+            justify-content: space-between;
+
+            z-index: 30;
+        }
+
+        .skip-button,
+        .confirm-button {
+            border: none;
+
+            padding: 13px 30px;
+
+            border-radius: 15px;
+
+            font-family: inherit;
+
+            font-size: 15px;
+
+            font-weight: 600;
+
+            cursor: pointer;
+        }
+
+        .skip-button {
+            background: var(--magenta);
+            color: white;
+        }
+
+        .confirm-button {
+            background: var(--yellow);
+            color: var(--dark);
+        }
+
+        .confirm-button:disabled {
+            opacity: .5;
+            cursor: not-allowed;
+        }
+
+        /* =========================================
+           FINAL SCREEN
+        ========================================= */
+
+        .final-screen {
+            display: none;
+
+            position: absolute;
+
+            inset: 0;
+
+            background: var(--dark);
+
+            z-index: 100;
+
+            align-items: center;
+            justify-content: center;
+
+            text-align: center;
+        }
+
+        .final-screen.show {
+            display: flex;
+        }
+
+        .final-content h1 {
+            font-size: 50px;
+        }
+
+        .final-content p {
+            margin-top: 10px;
+            font-size: 18px;
+        }
+
+        .restart-button {
+            margin-top: 25px;
+
+            border: none;
+
+            background: var(--magenta);
+
+            color: white;
+
+            padding: 13px 28px;
+
+            border-radius: 20px;
+
+            font-family: inherit;
+
+            font-weight: 600;
+
+            cursor: pointer;
+        }
+
+        /* =========================================
+           RESPONSIVE
+        ========================================= */
+
+        @media(max-width: 800px) {
+
+            .question-card {
+                width: 80vw;
+            }
+
+            .header h1 {
+                font-size: 28px;
+            }
+
+            .answers {
+                grid-template-columns: 1fr;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<div class="page">
+
+
+    <!-- BACK -->
+
+    <button
+        class="back-button"
+        onclick="goBack()">
+
+        ←
+
+    </button>
+
+
+    <!-- SUBJECT -->
+
+    <div class="subject-pill">
+        Chemistry
+    </div>
+
+
+    <!-- QUESTION NUMBER -->
+
+    <div
+        class="question-counter"
+        id="questionCounter">
+
+        1 of 10
+
+    </div>
+
+
+    <!-- TIMER -->
+
+    <div
+        class="timer"
+        id="timer">
+
+        1:07
+
+    </div>
+
+
+    <!-- HOME -->
+
+    <button
+        class="home-button"
+        onclick="goHome()">
+
+        🏠
+
+    </button>
+
+
+    <!-- HEADER -->
+
+    <div class="header">
+
+        <h1>
+             Rapid Fire
+        </h1>
+
+        <p>
+            Answer before the ball reaches the end!
+        </p>
+
+    </div>
+
+
+   
+    
+
+
+    <!-- ==========================================
+         CURVED TIMER
+    =========================================== -->
+
+    <div class="timer-path">
+
+        <svg
+            viewBox="0 0 1000 600"
+            preserveAspectRatio="none"
+        >
+
+            <defs>
+
+                <linearGradient
+                    id="pathGradient"
+                    x1="0%"
+                    y1="0%"
+                    x2="100%"
+                    y2="0%"
+                >
+
+                    <stop
+                        offset="0%"
+                        stop-color="#F03272"
+                    />
+
+                    <stop
+                        offset="45%"
+                        stop-color="#FFAD01"
+                    />
+
+                    <stop
+                        offset="100%"
+                        stop-color="#FFAD01"
+                    />
+
+                </linearGradient>
+
+            </defs>
+
+
+            <!-- PATH -->
+
+            <path
+                id="timerPath"
+                class="path-gradient"
+                d="
+                    M -30 100
+
+                    C 120 170,
+                      100 440,
+                      380 470
+
+                    C 650 500,
+                      720 230,
+                      1030 110
+                "
+            />
+
+
+            <!-- TIMER BALL -->
+
+            <circle
+                id="timerBall"
+                cx="0"
+                cy="0"
+                r="38"
+            />
+
+        </svg>
+
+    </div>
+
+
+    <!-- ==========================================
+         QUESTION CARD
+    =========================================== -->
+
+    <div
+        class="question-card"
+        id="questionCard">
+
+
+        <div
+            class="question"
+            id="question">
+
+            What is the power house
+            of a cell?
+
+        </div>
+
+
+        <div
+            class="answers"
+            id="answers">
+
+        </div>
+
+
+        <div
+            class="feedback"
+            id="feedback">
+
+        </div>
+
+
+    </div>
+
+
+    <!-- ==========================================
+         BOTTOM BUTTONS
+    =========================================== -->
+
+    <div class="bottom-buttons">
+
+        <button
+            class="skip-button"
+            onclick="skipQuestion()">
+
+            Skip
+
+        </button>
+
+
+        <button
+            class="confirm-button"
+            id="confirmButton"
+            onclick="confirmAnswer()"
+            disabled>
+
+            Confirm
+
+        </button>
+
+    </div>
+
+
+    <!-- ==========================================
+         FINAL
+    =========================================== -->
+
+    <div
+        class="final-screen"
+        id="finalScreen">
+
+
+        <div class="final-content">
+
+            <h1>
+                🎉
+            </h1>
+
+            <h1>
+                Well played!
+            </h1>
+
+            <p id="finalScore">
+                You scored 0 / 10
+            </p>
+
+
+            <button
+                class="restart-button"
+                onclick="restartQuiz()">
+
+                Play Again
+
+            </button>
+
+        </div>
+
+
+    </div>
+
+
+</div>
+
+
+
+<script>
+
+/* =====================================================
+   QUESTIONS
+===================================================== */
+
+const questions = [
+
+    {
+        question: "What is the chemical symbol for Sodium?",
+
+        answers: [
+            "So",
+            "Na",
+            "S",
+            "Sd"
+        ],
+
+        correct: 1
+    },
+
+    {
+        question: "Which element has the chemical symbol O?",
+
+        answers: [
+            "Oxygen",
+            "Gold",
+            "Osmium",
+            "Oxide"
+        ],
+
+        correct: 0
+    },
+
+    {
+        question: "What is the chemical formula for water?",
+
+        answers: [
+            "CO₂",
+            "NaCl",
+            "H₂O",
+            "O₂"
+        ],
+
+        correct: 2
+    },
+
+    {
+        question: "What is NaCl commonly known as?",
+
+        answers: [
+            "Baking soda",
+            "Table salt",
+            "Sugar",
+            "Vinegar"
+        ],
+
+        correct: 1
+    },
+
+    {
+        question: "Which of these is an element?",
+
+        answers: [
+            "Water",
+            "Carbon dioxide",
+            "Oxygen",
+            "Sodium chloride"
+        ],
+
+        correct: 2
+    },
+
+    {
+        question: "Which two elements make up water?",
+
+        answers: [
+            "Hydrogen and Oxygen",
+            "Sodium and Chlorine",
+            "Carbon and Oxygen",
+            "Calcium and Oxygen"
+        ],
+
+        correct: 0
+    },
+
+    {
+        question: "What is the symbol for Calcium?",
+
+        answers: [
+            "C",
+            "Cl",
+            "Ca",
+            "Cm"
+        ],
+
+        correct: 2
+    },
+
+    {
+        question: "Which element has the symbol Cl?",
+
+        answers: [
+            "Calcium",
+            "Chlorine",
+            "Carbon",
+            "Copper"
+        ],
+
+        correct: 1
+    },
+
+    {
+        question: "What happens when two or more elements chemically combine?",
+
+        answers: [
+            "They disappear",
+            "They form a compound",
+            "They become atoms",
+            "Nothing happens"
+        ],
+
+        correct: 1
+    },
+
+    {
+        question: "Which formula represents carbon dioxide?",
+
+        answers: [
+            "CO",
+            "C₂O",
+            "CO₂",
+            "CaO"
+        ],
+
+        correct: 2
+    }
+
+];
+
+
+/* =====================================================
+   VARIABLES
+===================================================== */
+
+let currentQuestion = 0;
+
+let score = 0;
+
+let selectedAnswer = null;
+
+let timeLeft = 67;
+
+let timerInterval;
+
+
+/* =====================================================
+   ELEMENTS
+===================================================== */
+
+const question =
+    document.getElementById("question");
+
+const answers =
+    document.getElementById("answers");
+
+const feedback =
+    document.getElementById("feedback");
+
+const confirmButton =
+    document.getElementById("confirmButton");
+
+const timer =
+    document.getElementById("timer");
+
+const questionCounter =
+    document.getElementById("questionCounter");
+
+const timerPath =
+    document.getElementById("timerPath");
+
+const timerBall =
+    document.getElementById("timerBall");
+
+const finalScreen =
+    document.getElementById("finalScreen");
+
+const finalScore =
+    document.getElementById("finalScore");
+
+
+/* =====================================================
+   SVG PATH LENGTH
+===================================================== */
+
+const pathLength =
+    timerPath.getTotalLength();
+
+
+/* =====================================================
+   LOAD QUESTION
+===================================================== */
+
+function loadQuestion() {
+
+    clearInterval(timerInterval);
+
+    selectedAnswer = null;
+
+    timeLeft = 67;
+
+    timer.textContent =
+        formatTime(timeLeft);
+
+    questionCounter.textContent =
+        `${currentQuestion + 1} of ${questions.length}`;
+
+    const current =
+        questions[currentQuestion];
+
+    question.textContent =
+        current.question;
+
+    answers.innerHTML = "";
+
+    feedback.textContent = "";
+
+    confirmButton.disabled = true;
+
+    current.answers.forEach(
+        (answer, index) => {
+
+            const button =
+                document.createElement("button");
+
+            button.className =
+                "answer";
+
+            button.textContent =
+                answer;
+
+            button.onclick =
+                function() {
+
+                    selectAnswer(
+                        index,
+                        button
+                    );
+
+                };
+
+            answers.appendChild(button);
+
+        }
+    );
+
+    moveBall(0);
+
+    startTimer();
+}
+
+
+/* =====================================================
+   SELECT ANSWER
+===================================================== */
+
+function selectAnswer(index, button) {
+
+    document
+        .querySelectorAll(".answer")
+        .forEach(btn => {
+
+            btn.classList.remove("selected");
+
+        });
+
+    button.classList.add("selected");
+
+    selectedAnswer = index;
+
+    confirmButton.disabled = false;
+}
+
+
+/* =====================================================
+   CONFIRM
+===================================================== */
+
+function confirmAnswer() {
+
+    if (selectedAnswer === null) {
+        return;
+    }
+
+    clearInterval(timerInterval);
+
+    const correct =
+        questions[currentQuestion].correct;
+
+    const buttons =
+        document.querySelectorAll(".answer");
+
+    buttons.forEach(
+        (button, index) => {
+
+            button.classList.add("disabled");
+
+            if (index === correct) {
+
+                button.classList.add("correct");
+
+            }
+
+        }
+    );
+
+    if (selectedAnswer === correct) {
+
+        score++;
+
+        feedback.textContent =
+            "✓ Correct!";
+
+    } else {
+
+        buttons[selectedAnswer]
+            .classList.add("wrong");
+
+        feedback.textContent =
+            "Not quite!";
+
+    }
+
+    confirmButton.disabled = true;
+
+    setTimeout(
+        nextQuestion,
+        1000
+    );
+}
+
+
+/* =====================================================
+   SKIP
+===================================================== */
+
+function skipQuestion() {
+
+    clearInterval(timerInterval);
+
+    nextQuestion();
+}
+
+
+/* =====================================================
+   NEXT QUESTION
+===================================================== */
+
+function nextQuestion() {
+
+    currentQuestion++;
+
+    if (
+        currentQuestion >=
+        questions.length
+    ) {
+
+        showFinal();
+
+        return;
+    }
+
+    loadQuestion();
+}
+
+
+/* =====================================================
+   TIMER
+===================================================== */
+
+function startTimer() {
+
+    timerInterval =
+        setInterval(
+            function() {
+
+                timeLeft--;
+
+                timer.textContent =
+                    formatTime(timeLeft);
+
+                const progress =
+                    1 -
+                    (
+                        timeLeft / 67
+                    );
+
+                moveBall(progress);
+
+                if (timeLeft <= 0) {
+
+                    clearInterval(
+                        timerInterval
+                    );
+
+                    feedback.textContent =
+                        "Time's up!";
+
+                    setTimeout(
+                        nextQuestion,
+                        700
+                    );
+                }
+
+            },
+            1000
+        );
+}
+
+
+/* =====================================================
+   MOVE BALL ALONG CURVE
+===================================================== */
+
+function moveBall(progress) {
+
+    progress =
+        Math.max(
+            0,
+            Math.min(
+                1,
+                progress
+            )
+        );
+
+    const point =
+        timerPath.getPointAtLength(
+            pathLength * progress
+        );
+
+    timerBall.setAttribute(
+        "cx",
+        point.x
+    );
+
+    timerBall.setAttribute(
+        "cy",
+        point.y
+    );
+}
+
+
+/* =====================================================
+   FORMAT TIMER
+===================================================== */
+
+function formatTime(seconds) {
+
+    const minutes =
+        Math.floor(
+            seconds / 60
+        );
+
+    const remaining =
+        seconds % 60;
+
+    return (
+        minutes +
+        ":" +
+        String(
+            remaining
+        ).padStart(2, "0")
+    );
+}
+
+
+/* =====================================================
+   FINAL
+===================================================== */
+
+function showFinal() {
+
+    clearInterval(timerInterval);
+
+    finalScore.textContent =
+        `You scored ${score} / ${questions.length}`;
+
+    finalScreen.classList.add("show");
+}
+
+
+/* =====================================================
+   RESTART
+===================================================== */
+
+function restartQuiz() {
+
+    currentQuestion = 0;
+
+    score = 0;
+
+    finalScreen.classList.remove("show");
+
+    loadQuestion();
+}
+
+
+/* =====================================================
+   NAVIGATION
+===================================================== */
+
+function goBack() {
+
+    window.location.href =
+        "index.html";
+}
+
+
+function goHome() {
+
+    window.location.href =
+        "index.html";
+}
+
+
+/* =====================================================
+   START
+===================================================== */
+
+loadQuestion();
+
+</script>
+
+</body>
+
+</html>
